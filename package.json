@@ -1,0 +1,14 @@
+{
+  "name": "chat-ai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server dev"
+  },
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+  }
+}
