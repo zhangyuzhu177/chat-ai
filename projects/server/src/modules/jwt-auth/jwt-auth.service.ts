@@ -67,6 +67,7 @@ export class JwtAuthService {
     const client = this._redisSrv.getClient(RedisType.AUTH_JWT)!
     try {
       const exists = await client.exists(token)
+      
       if (!exists)
         throw new Error('AccessToken not exists in cache')
     }
@@ -79,7 +80,7 @@ export class JwtAuthService {
         HttpStatus.FORBIDDEN,
       )
     }
-    client.del(token)
+    await client.del(token)
     return true
   }
 }

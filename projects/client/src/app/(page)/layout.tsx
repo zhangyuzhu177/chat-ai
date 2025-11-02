@@ -1,3 +1,4 @@
+import Header from "../components/Header";
 import Menu from "../components/Menu";
 
 export default function RootLayout({
@@ -6,9 +7,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className=" h-min-screen w-full flex">
+    <div className="h-screen w-full flex">
       <Menu />
-      {children}
+
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <div className="p-4 flex-1">
+          { children }
+        </div>
+      </div>
     </div>
   );
 }
