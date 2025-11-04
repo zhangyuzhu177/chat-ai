@@ -50,10 +50,10 @@ export default function Profile(props: ProfileProps) {
     <>
       {user && (
         <div className="px-1.5 py-4 w-full">
-          <Menubar open={false} className="bg-transparent h-auto p-0 border-none shadow-none">
+          <Menubar className="bg-transparent h-auto p-0 border-none shadow-none">
             <MenubarMenu>
               <MenubarTrigger className="w-full cursor-pointer p-0 flex items-center gap-2 justify-between">
-                <div className="w-full flex items-center justify-between p-2 cursor-pointer transition-all rounded-lg hover:bg-[#EDEDED] data-[state=open]:bg-[#EDEDED] ">
+                <div className="w-full flex items-center justify-between p-2 cursor-pointer transition-all rounded-lg hover:bg-[#EDEDED] data-[state=open]:bg-[#EDEDED] dark:hover:bg-[#303030] dark:data-[state=open]:bg-[#303030]">
                   {
                     props.collapsed
                     ? <Image src={user?.avatar} width={24} height={24} className="rounded-full" alt="" />
@@ -67,16 +67,16 @@ export default function Profile(props: ProfileProps) {
                   }
                 </div>
               </MenubarTrigger>
-              <MenubarContent >
-                <div className="flex items-center gap-2 p-2 text-sm text-[#8F8F8F]">
+              <MenubarContent className="">
+                <div className="flex items-center gap-2 p-2 text-sm text-[#8F8F8F] dark:text-[#AFAFAF]">
                   <CircleUser size={16} />
                   <div>{ user?.email }</div>
                 </div>
                 {/* <MenubarItem className="flex items-center gap-2"> */}
                   <Settings />
                 {/* </MenubarItem> */}
-                <MenubarItem className="flex items-center gap-2" onClick={logout}>
-                  <LogOut size={24} color="black"/>
+                <MenubarItem className="flex items-center gap-2 " onClick={logout}>
+                  <LogOut size={24} className="text-black dark:text-white"/>
                   <div>退出登录</div>
                 </MenubarItem>
               </MenubarContent>
