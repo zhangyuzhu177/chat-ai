@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from "react"
-import { Settings as SettingsIcon, X } from "lucide-react"
+import { Package, Settings as SettingsIcon, X } from "lucide-react"
 
 import { MenubarItem } from "@/components/ui/menubar"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+import ModuleSettings from "./ModuleSettings"
 import GeneralSettings from "./GeneralSettings"
 
 interface Tab {
@@ -22,6 +24,11 @@ export default function Settings() {
       tab: 1,
       title: '通用设置',
       icon: <SettingsIcon size={16} className="text-black dark:text-white"/>
+    },
+    {
+      tab: 2,
+      title: '添加模型',
+      icon: <Package size={16} className="text-black dark:text-white"/>
     },
   ]
   
@@ -42,7 +49,7 @@ export default function Settings() {
       </MenubarItem>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-[760px]! bg-white dark:bg-[#212121] p-4 [&>button:last-child]:hidden focus:outline-none focus:ring-0">
+        <DialogContent className="max-w-[860px]! bg-white dark:bg-[#212121] p-4 [&>button:last-child]:hidden focus:outline-none focus:ring-0">
           <DialogHeader>
             <DialogTitle className="flex justify-between items-center">
               <div>系统设置</div>
@@ -77,6 +84,8 @@ export default function Settings() {
 export function TabComponent({tab}:{tab:Tab['tab']}) {
   if (tab === 1)
     return <GeneralSettings />
+  else if (tab === 2)
+    return <ModuleSettings />
   else
     return <div>暂无数据</div>
 }

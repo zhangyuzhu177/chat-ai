@@ -8,6 +8,7 @@ import { useFetch } from "@/hooks/useFetch"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar"
 import { CircleUser, Ellipsis, LogOut } from "lucide-react"
 import Settings from "../Settings"
+import { toast } from "sonner"
 
 interface ProfileProps {
   /**
@@ -26,11 +27,11 @@ export default function Profile(props: ProfileProps) {
    */
   async function logout() {
     try {
-      const res = await fetchClient('/auth/logout',{ method: 'POST' })
+      await fetchClient('/auth/logout',{ method: 'POST' })
       router.replace('/auth')
-      console.log('退出登录成功', res)
-    } catch (error) {
-      console.error('请求失败', error)
+      toast.success('退出登录成功')
+    } catch (error:any) {
+      toast.error(error.message)
     }
   }
 
@@ -39,8 +40,8 @@ export default function Profile(props: ProfileProps) {
       try {
         const res = await fetchClient<{ data: User }>('/user/own/profile')
         setUser(res.data)
-      } catch (error) {
-        console.error('请求失败', error)
+      } catch (error:any) {
+        toast.error(error.message)
       }
     }
     getUserProfile()

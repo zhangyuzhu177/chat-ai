@@ -1,6 +1,6 @@
-import { LaptopMinimal, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { LaptopMinimal, Moon, Sun } from 'lucide-react'
 
 interface ThemeTab {
   name: string
@@ -9,7 +9,7 @@ interface ThemeTab {
 }
 
 export default function GeneralSettings() {
-  const { theme, setTheme, systemTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   const themeTabs:ThemeTab[] = [
@@ -30,16 +30,13 @@ export default function GeneralSettings() {
     },
   ]
 
-    useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true)
     }, 0)
     return () => clearTimeout(timer)
   }, [])
   if (!mounted) return null
-
-  // ✅ 计算当前实际主题（resolvedTheme）
-  const currentTheme = theme === 'system' ? systemTheme : theme
 
   return (
     <div className='flex flex-col gap-4'>

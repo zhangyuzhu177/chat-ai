@@ -1,5 +1,8 @@
-import Header from "../components/Header";
+'use client'
+
 import Menu from "../components/Menu";
+import Header from "../components/Header";
+import { ChatProvider } from "@/contexts/ChatContext";
 
 export default function RootLayout({
   children,
@@ -7,15 +10,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-screen w-full flex">
-      <Menu />
-
-      <div className="flex-1 flex flex-col bg-white dark:bg-[#212121]">
-        <Header />
-        <div className="p-4 flex-1">
-          { children }
+    <ChatProvider>
+      <div className="h-screen w-full flex">
+        <Menu />
+        <div className="flex-1 flex flex-col bg-white dark:bg-[#212121]">
+          <Header />
+          <div className="flex-1 overflow-hidden">
+            { children }
+          </div>
         </div>
       </div>
-    </div>
+    </ChatProvider>
   );
 }

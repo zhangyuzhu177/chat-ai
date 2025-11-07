@@ -1,7 +1,7 @@
-import { applyDecorators, CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, UseGuards } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import {Request, Response} from 'express'
+import { applyDecorators, CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, UseGuards } from '@nestjs/common';
 import { getReflectorValue } from 'src/utils';
-import {Response} from 'express'
 
 @Injectable()
 export class LoginGuard implements CanActivate {
@@ -10,7 +10,7 @@ export class LoginGuard implements CanActivate {
   ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req: FastifyRequest = context.switchToHttp().getRequest()
+    const req: Request = context.switchToHttp().getRequest()
     const res: Response = context.switchToHttp().getResponse()
 
     const loginRequired = getReflectorValue<boolean>(

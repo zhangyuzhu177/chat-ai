@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Query, Req, Res } from "@nestjs/common";
+import type { Request, Response } from 'express';
 
 import { AuthService } from "./auth.service";
-import { Response } from 'express'; 
 import { JwtAuthService } from "../jwt-auth/jwt-auth.service";
 
 @Controller('auth')
@@ -26,7 +26,7 @@ export class AuthController {
 
   @Post('logout')
   public async logout(
-    @Req() req: FastifyRequest,
+    @Req() req: Request,
     @Res() res: Response
   ) {
     await this._jwtAuthSrv.destroyLoginAuthToken(req.token!)

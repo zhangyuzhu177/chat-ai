@@ -112,6 +112,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* 隐藏滚动条（支持 Chrome, Safari, Edge） */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* 隐藏滚动条（支持 Firefox） */
+.scrollbar-none {
+  scrollbar-width: none; /* Firefox */
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

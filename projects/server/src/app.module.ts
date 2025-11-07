@@ -10,6 +10,10 @@ import { UserModule } from './modules/user/user.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { ArticleModule } from './modules/article/article.module';
 import { JwtAuthModule } from './modules/jwt-auth/jwt-auth.module';
+import { ModelModule } from './modules/model/model.module';
+import { ConversationModule } from './modules/conversation/conversation.module';
+import { MessageModule } from './modules/message/message.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { InfoMiddleware } from './middleware/info.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
@@ -21,6 +25,10 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
     RedisModule,
     JwtAuthModule,
     ArticleModule,
+    ModelModule,
+    ConversationModule,
+    MessageModule,
+    ChatModule,
 
     // 环境配置
     ConfigModule.forRoot({

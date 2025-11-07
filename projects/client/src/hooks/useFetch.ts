@@ -49,20 +49,20 @@ export function useFetch() {
     // 支持相对路径或完整路径
     const fullUrl = url.startsWith('http') ? url : `${apiBase}${url}`
 
-    const res = await fetch(fullUrl, fetchOptions)
-
+    const response = await fetch(fullUrl, fetchOptions)
+    const res = await response.json()
+    
     if (res.status === 403) {
       router.replace('/auth')
-      return null as unknown as T
+      throw new Error(res.message)
     }
 
-    if (!res.ok) {
-      const msg = await res.text()
-      throw new Error(`请求失败：${res.status} ${msg}`)
+    if (!response.ok) {
+      throw new Error(res.message)
     }
 
     try {
-      return await res.json()
+      return await res
     } catch {
       return null as unknown as T
     }

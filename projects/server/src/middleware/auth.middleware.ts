@@ -1,6 +1,7 @@
 import { ModuleRef } from '@nestjs/core'
 import { Injectable, Logger } from '@nestjs/common'
 import type { NestMiddleware } from '@nestjs/common'
+import type { Request, Response, NextFunction } from 'express'
 
 import type { User } from 'src/entities'
 import { UserService } from 'src/modules/user/user.service'
@@ -18,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
     return authHeader && authHeader.replace(/^Bearer\s(\S*)$/, '$1')
   }
 
-  async use(req: FastifyRequest, _res: any, next: () => void) {
+  async use(req: Request, _res: Response, next: NextFunction) {
     let query
     try {
       query = req.url
@@ -32,9 +33,6 @@ export class AuthMiddleware implements NestMiddleware {
         }, {})
     }
     catch (_) {}
-
-    // const authHeader = (req?.headers as any)?.authorization
-    // const access_token = this._readTokenFromBearAuthHeader(authHeader) || query.token
     
     const access_token = req.cookies?.token
     if (!access_token) {
