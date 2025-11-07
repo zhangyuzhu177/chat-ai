@@ -76,7 +76,6 @@ export interface Conversation {
   totalTokens: number
   createdAt: string
   updatedAt: string
-  deletedAt?: string
 }
 
 /**

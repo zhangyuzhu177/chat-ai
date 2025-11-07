@@ -13,6 +13,7 @@ export class ConversationController {
    * 创建对话
    */
   @Post()
+  @IsLogin()
   createConversation(@Req() req: Request, @Body() dto: CreateConversationDto) {
     const userId = req.user?.id || '';
     return this._conversationSrv.createConversation(userId, dto);
@@ -22,6 +23,7 @@ export class ConversationController {
    * 获取当前用户的所有对话列表
    */
   @Get()
+  @IsLogin()
   getUserConversations(@Req() req: Request) {
     const userId = req.user?.id || '';
     return this._conversationSrv.getUserConversations(userId);
@@ -31,6 +33,7 @@ export class ConversationController {
    * 获取单个对话详情
    */
   @Get(':id')
+  @IsLogin()
   getConversationById(@Req() req: Request, @Param('id') id: string) {
     const userId = req.user?.id || '';
     return this._conversationSrv.getConversationById(id, userId);
@@ -40,6 +43,7 @@ export class ConversationController {
    * 更新对话
    */
   @Put(':id')
+  @IsLogin()
   updateConversation(
     @Req() req: Request,
     @Param('id') id: string,
@@ -53,6 +57,7 @@ export class ConversationController {
    * 删除对话
    */
   @Delete(':id')
+  @IsLogin()
   deleteConversation(@Req() req: Request, @Param('id') id: string) {
     const userId = req.user?.id || '';
     return this._conversationSrv.deleteConversation(id, userId);

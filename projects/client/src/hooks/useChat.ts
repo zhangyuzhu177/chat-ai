@@ -12,6 +12,7 @@ import type {
   SendMessageDto,
   MessageRole,
 } from '@/types/chat'
+import { toast } from 'sonner'
 
 /**
  * 聊天 Hook
@@ -142,9 +143,9 @@ export function useChat() {
           setCurrentConversation(null)
           setMessages([])
         }
-      } catch (error) {
-        console.error('删除对话失败:', error)
-        throw error
+        toast.success('删除成功')
+      } catch (error:any) {
+        toast.error(error.message)
       }
     },
     [chatApi, currentConversation]

@@ -8,7 +8,6 @@ import allConfig from './config'
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RedisModule } from './modules/redis/redis.module';
-import { ArticleModule } from './modules/article/article.module';
 import { JwtAuthModule } from './modules/jwt-auth/jwt-auth.module';
 import { ModelModule } from './modules/model/model.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
@@ -23,9 +22,8 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
     UserModule,
     AuthModule,
     RedisModule,
-    JwtAuthModule,
-    ArticleModule,
     ModelModule,
+    JwtAuthModule,
     ConversationModule,
     MessageModule,
     ChatModule,

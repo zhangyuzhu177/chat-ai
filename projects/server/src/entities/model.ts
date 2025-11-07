@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Conversation } from "./conversation";
 
 @Entity()
 export class Model {
@@ -28,6 +29,9 @@ export class Model {
   // 排序权重
   @Column({ default: 0 })
   sortOrder: number
+
+  @OneToMany(() => Conversation, (conversation) => conversation.model)
+  conversations: Conversation[];
 
   @CreateDateColumn()
   createdAt: Date

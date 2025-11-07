@@ -137,9 +137,9 @@ function CodeBlock({ language, code, isDark }: { language: string; code: string;
       {/* 语言标签和复制按钮 */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 rounded-t-lg border-b border-gray-700">
         <span className="text-xs text-gray-400 font-mono uppercase">{language}</span>
-        <button
+        <div
           onClick={handleCopy}
-          className="flex items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-gray-200 transition-colors rounded hover:bg-gray-700"
+          className="flex cursor-pointer items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-gray-200 transition-colors rounded hover:bg-gray-700"
           title="复制代码"
         >
           {copied ? (
@@ -153,7 +153,7 @@ function CodeBlock({ language, code, isDark }: { language: string; code: string;
               <span>复制</span>
             </>
           )}
-        </button>
+        </div>
       </div>
 
       {/* 代码内容 */}

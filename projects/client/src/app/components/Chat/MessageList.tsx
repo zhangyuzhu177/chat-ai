@@ -33,7 +33,7 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
         {/* 头像 */}
         <div
           className={`
-            flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
+            shrink-0 w-8 h-8 rounded-full flex items-center justify-center
             ${
               isUser
                 ? 'bg-blue-500'
@@ -73,9 +73,9 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
             `}
           >
             {isError && message.errorMessage ? (
-              <div className="whitespace-pre-wrap break-words">{message.errorMessage}</div>
+              <div className="whitespace-pre-wrap wrap-break-words">{message.errorMessage}</div>
             ) : isUser ? (
-              <div className="whitespace-pre-wrap break-words">{message.content}</div>
+              <div className="whitespace-pre-wrap wrap-break-words">{message.content}</div>
             ) : (
               <MarkdownRenderer content={message.content} />
             )}
@@ -111,7 +111,7 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
           {/* 流式输出时的临时消息 */}
           {streamingContent && (
             <div className="flex gap-4 px-4 py-6 bg-[#F9F9F9] dark:bg-[#212121]">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+              <div className="shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
                 <Bot size={18} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
@@ -132,7 +132,7 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
           {/* 加载指示器 */}
           {isLoading && !streamingContent && (
             <div className="flex gap-4 px-4 py-6 bg-[#F9F9F9] dark:bg-[#212121]">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+              <div className="shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
                 <Bot size={18} className="text-white" />
               </div>
               <div className="flex-1">

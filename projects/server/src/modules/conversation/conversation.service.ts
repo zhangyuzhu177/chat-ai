@@ -41,7 +41,7 @@ export class ConversationService {
     return await this._conversationRepo.find({
       where: { userId },
       relations: ['model'],
-      order: { isPinned: 'DESC', updatedAt: 'DESC' },
+      order: { updatedAt: 'DESC' },
     });
   }
 

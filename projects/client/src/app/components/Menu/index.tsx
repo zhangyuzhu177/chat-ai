@@ -25,7 +25,6 @@ export default function Menu() {
     selectedModelId,
     currentConversation,
     deleteConversation,
-    updateConversation,
     switchConversation,
     createConversation
   } = useChatContext()
@@ -132,7 +131,7 @@ export default function Menu() {
       </div>
 
       {/* 对话记录 */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         {!collapsed && (
           <ConversationList
             conversations={conversations}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MessageSquare, Pin, Trash2 } from 'lucide-react'
+import { MessageSquare, Trash2 } from 'lucide-react'
 import type { Conversation } from '@/types/chat'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 
