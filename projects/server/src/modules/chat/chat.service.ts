@@ -119,8 +119,8 @@ export class ChatService {
         );
       }
 
-      // 9. 如果是第一条消息，自动生成标题
-      if (conversation.messageCount === 0 && conversation.title === '新对话') {
+      // 9. 如果是第一条消息且标题为空或为"新对话"，自动生成标题
+      if (conversation.messageCount === 0 && (!conversation.title || conversation.title === '新对话')) {
         const title = this.generateTitle(dto.content);
         await this._conversationSrv.updateConversation(
           dto.conversationId,
@@ -214,13 +214,16 @@ export class ChatService {
       stream,
       userMessage,
       conversationId: dto.conversationId,
+      conversation,
+      userId,
+      userContent: dto.content,
     };
   }
 
   /**
    * 生成对话标题（从第一条消息提取）
    */
-  private generateTitle(content: string): string {
+  generateTitle(content: string): string {
     // 简单实现：取前 20 个字符
     const title = content.trim().slice(0, 20);
     return title + (content.length > 20 ? '...' : '');

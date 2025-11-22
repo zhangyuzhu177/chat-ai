@@ -19,6 +19,7 @@ export default function Home() {
     loadConversations,
     createConversation,
     sendMessageStream,
+    stopStreaming,
   } = useChatContext()
 
   // 初始化：加载模型和对话列表
@@ -80,6 +81,7 @@ export default function Home() {
       {/* 输入框 */}
       <ChatInput
         onSend={handleSendMessage}
+        onStop={stopStreaming}
         disabled={isSending}
         placeholder={
           currentConversation

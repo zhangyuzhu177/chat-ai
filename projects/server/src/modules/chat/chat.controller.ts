@@ -37,7 +37,7 @@ export class ChatController {
     @Body() dto: SendMessageDto,
   ) {
     const userId = req.user?.id || '';
-    const { stream, userMessage, conversationId } =
+    const { stream, userMessage, conversationId, conversation, userContent } =
       await this._chatSrv.sendMessageStream(userId, dto);
 
     // 设置 SSE 响应头
@@ -74,6 +74,16 @@ export class ChatController {
       // 更新对话统计
       await this._conversationSrv.incrementMessageCount(conversationId);
       await this._conversationSrv.incrementMessageCount(conversationId);
+
+      // 如果是第一条消息且标题为空或为"新对话"，自动生成标题
+      if (conversation.messageCount === 0 && (!conversation.title || conversation.title === '新对话')) {
+        const title = this._chatSrv.generateTitle(userContent);
+        await this._conversationSrv.updateConversation(
+          conversationId,
+          userId,
+          { title },
+        );
+      }
 
       // 发送结束标记
       res.write('data: [DONE]\n\n');

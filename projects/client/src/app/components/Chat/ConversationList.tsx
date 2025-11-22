@@ -36,7 +36,7 @@ export default function ConversationList({
         `}
         onClick={() => onSelect(conversation)}
       >
-        <div className="text-sm font-medium text-nowrap truncate"> {conversation.title} </div>
+        <div className="text-sm font-medium text-nowrap truncate"> {conversation.title || '新对话'} </div>
         <div className="top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
           <Trash2 onClick={(e) => {
             e.stopPropagation()
@@ -80,7 +80,7 @@ export default function ConversationList({
             <AlertDialogTitle>删除对话?</AlertDialogTitle>
           </AlertDialogHeader>
           <div className="flex gap-1">
-            确定要删除 <div className="font-bold">{ conversation?.title }</div> 对话吗?
+            确定要删除 <div className="font-bold">{ conversation?.title || '新对话' }</div> 对话吗?
           </div>
           <AlertDialogFooter>
             <AlertDialogCancel className='cursor-pointer'>取消</AlertDialogCancel>

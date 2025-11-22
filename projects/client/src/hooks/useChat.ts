@@ -35,6 +35,10 @@ export function useChat() {
   // AbortController 用于终止流式请求
   const abortControllerRef = useRef<AbortController | null>(null)
 
+  // 追踪当前流式内容（用于停止时保存）
+  const currentStreamContentRef = useRef<string>('')
+  const currentConversationIdRef = useRef<string>('')
+
   // ==================== Model 相关 ====================
 
   /**
@@ -238,6 +242,10 @@ export function useChat() {
         // 创建新的 AbortController
         abortControllerRef.current = new AbortController()
 
+        // 重置流式内容追踪
+        currentStreamContentRef.current = ''
+        currentConversationIdRef.current = targetConversationId
+
         // 添加用户消息
         const tempUserMessage: Message = {
           id: `temp-user-${Date.now()}`,
@@ -264,10 +272,11 @@ export function useChat() {
           // onMessage
           (chunk: string) => {
             fullContent += chunk
+            currentStreamContentRef.current = fullContent
             setStreamingContent(fullContent)
           },
           // onComplete
-          () => {
+          async () => {
             // 添加完整的 AI 回复消息
             const aiMessage: Message = {
               id: `ai-${Date.now()}`,
@@ -282,15 +291,35 @@ export function useChat() {
             setMessages((prev) => [...prev, aiMessage])
             setStreamingContent('')
             setIsSending(false)
+            abortControllerRef.current = null
+            currentStreamContentRef.current = ''
+            currentConversationIdRef.current = ''
 
-            // 更新对话列表
-            setConversations((prev) =>
-              prev.map((c) =>
-                c.id === targetConversationId
-                  ? { ...c, messageCount: c.messageCount + 2, updatedAt: new Date().toISOString() }
-                  : c
+            // 重新加载对话详情以获取更新的标题
+            try {
+              const response = await chatApi.getConversationById(targetConversationId)
+              const updatedConversation = response.data
+
+              // 更新当前对话
+              setCurrentConversation(updatedConversation)
+
+              // 更新对话列表
+              setConversations((prev) =>
+                prev.map((c) =>
+                  c.id === targetConversationId ? updatedConversation : c
+                )
               )
-            )
+            } catch (error) {
+              console.error('重新加载对话失败:', error)
+              // 降级：只更新消息计数
+              setConversations((prev) =>
+                prev.map((c) =>
+                  c.id === targetConversationId
+                    ? { ...c, messageCount: c.messageCount + 2, updatedAt: new Date().toISOString() }
+                    : c
+                )
+              )
+            }
           },
           // onError
           (error: string) => {
@@ -311,17 +340,58 @@ export function useChat() {
             setMessages((prev) => [...prev, errorMessage])
             setStreamingContent('')
             setIsSending(false)
-          }
+            abortControllerRef.current = null
+          },
+          abortControllerRef.current.signal // 传递 AbortSignal
         )
-      } catch (error) {
+      } catch (error: any) {
         console.error('发送流式消息失败:', error)
+
         setStreamingContent('')
         setIsSending(false)
+        abortControllerRef.current = null
+        currentStreamContentRef.current = ''
+        currentConversationIdRef.current = ''
         throw error
       }
     },
     [chatApi, currentConversation]
   )
+
+  /**
+   * 停止流式输出
+   */
+  const stopStreaming = useCallback(() => {
+    if (abortControllerRef.current) {
+      // 保存当前已接收的内容
+      const content = currentStreamContentRef.current
+      const conversationId = currentConversationIdRef.current
+
+      // 中止请求
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+
+      // 如果有内容，保存为消息
+      if (content) {
+        const aiMessage: Message = {
+          id: `ai-${Date.now()}`,
+          conversationId,
+          role: 'assistant' as MessageRole,
+          content,
+          tokenCount: 0,
+          isError: false,
+          createdAt: new Date().toISOString(),
+        }
+        setMessages((prev) => [...prev, aiMessage])
+      }
+
+      // 清理状态
+      setStreamingContent('')
+      setIsSending(false)
+      currentStreamContentRef.current = ''
+      currentConversationIdRef.current = ''
+    }
+  }, [])
 
   /**
    * 切换对话
@@ -376,6 +446,7 @@ export function useChat() {
     deleteConversation,
     sendMessage,
     sendMessageStream,
+    stopStreaming,
     switchConversation,
     clearCurrentConversation,
   }

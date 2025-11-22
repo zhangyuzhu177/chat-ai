@@ -102,14 +102,9 @@ export class AuthService {
     } catch (error) {
       console.log(error);
 
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: '登录失败',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-      return res.redirect(`http://localhost:3000/auth`);
+      // 登录失败时重定向回前端登录页，并带上错误信息
+      const errorMessage = encodeURIComponent('登录失败，请重试');
+      return res.redirect(`http://localhost:3000/auth?error=${errorMessage}`);
     }
   }
 

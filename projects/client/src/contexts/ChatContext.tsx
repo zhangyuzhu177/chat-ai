@@ -36,6 +36,7 @@ interface ChatContextType {
 ) => Promise<Conversation>
   deleteConversation: (id: string) => Promise<void>
   sendMessageStream: (content: string, conversationId?: string) => Promise<void>
+  stopStreaming: () => void
   switchConversation: (conversation: Conversation) => Promise<void>
 }
 

@@ -206,9 +206,8 @@ export class ChatApi {
         }
       }
     } catch (error) {
-      // 如果是用户主动取消，不触发错误回调
+      // 如果是用户主动取消，什么都不做（由 stopStreaming 方法处理）
       if (error instanceof Error && error.name === 'AbortError') {
-        onComplete() // 直接完成，不触发错误
         return
       }
       onError(error instanceof Error ? error.message : '未知错误')

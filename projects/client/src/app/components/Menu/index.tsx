@@ -2,7 +2,7 @@
 
 import { toast } from "sonner"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { PanelLeftClose, PanelRightClose, SquarePen } from "lucide-react"
 
@@ -19,6 +19,34 @@ export default function Menu() {
   const [hover, setHover] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+  const [manualControl, setManualControl] = useState(false) // 是否手动控制
+
+  // 监听屏幕宽度变化
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth
+      // 如果没有手动控制，则自动根据宽度调整
+      if (!manualControl) {
+        setCollapsed(width < 900)
+      }
+      // 如果窗口缩小到900以下，重置手动控制状态，强制折叠
+      if (width < 900) {
+        setCollapsed(true)
+        setManualControl(false)
+      }
+    }
+
+    // 初始化时检查一次
+    handleResize()
+
+    // 添加监听器
+    window.addEventListener('resize', handleResize)
+
+    // 清理监听器
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [manualControl])
 
   const {
     conversations,
@@ -39,14 +67,15 @@ export default function Menu() {
     if (!selectedModelId) {
       return toast.warning('请先选择一个模型')
     }
-    
-    if (conversations.find(c => c.title === '新对话'))
+
+    // 检查是否已存在未命名的新对话（标题为空或"新对话"）
+    if (conversations.find(c => !c.title || c.title === '新对话'))
       return
 
     try {
       await createConversation({
         modelId: selectedModelId,
-        title: '新对话',
+        title: '', // 不设置标题，等待用户发送第一条消息后自动生成
       })
     } catch (error) {
       console.error('创建对话失败:', error)
@@ -66,6 +95,15 @@ export default function Menu() {
   }
 
   /**
+   * 手动切换菜单折叠状态
+   */
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed)
+    setManualControl(true) // 标记为手动控制
+    setHover(false)
+  }
+
+  /**
    * 展开视图
    */
   const expandedView = () => {
@@ -76,10 +114,7 @@ export default function Menu() {
         </div>
         <div
           className="cursor-pointer p-2 rounded-md hover:bg-[#EDEDED] dark:hover:bg-[#303030]"
-          onClick={() => {
-            setCollapsed(!collapsed)
-            setHover(false)
-          }}
+          onClick={toggleCollapsed}
         >
           <PanelLeftClose size={20} strokeWidth={1.5}/>
         </div>
@@ -99,9 +134,9 @@ export default function Menu() {
           onMouseLeave={handleLeave}
         >
           { hover ?
-            <div className="w-full flex items-center justify-center" onClick={() => setCollapsed(!collapsed)}>
+            <div className="w-full flex items-center justify-center" onClick={toggleCollapsed}>
               <PanelRightClose size={20} strokeWidth={1.5}/>
-            </div> 
+            </div>
             : <Image src={logo} alt="logo" width={24} height={24} />
           }
         </div>

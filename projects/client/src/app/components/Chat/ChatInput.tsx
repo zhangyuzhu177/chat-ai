@@ -5,12 +5,14 @@ import { Send, Square } from 'lucide-react'
 
 interface ChatInputProps {
   onSend: (content: string) => void
+  onStop?: () => void
   disabled?: boolean
   placeholder?: string
 }
 
 export default function ChatInput({
   onSend,
+  onStop,
   disabled = false,
   placeholder = '输入消息...',
 }: ChatInputProps) {
@@ -82,21 +84,23 @@ export default function ChatInput({
           )}
         </div>
 
-        {/* 发送按钮 */}
+        {/* 发送/停止按钮 */}
         <button
-          onClick={handleSend}
-          disabled={disabled || !content.trim()}
+          onClick={disabled ? onStop : handleSend}
+          disabled={!disabled && !content.trim()}
           className={`
             flex-shrink-0 w-12 h-12 rounded-lg
             flex items-center justify-center
             transition-all
             ${
-              disabled || !content.trim()
+              !disabled && !content.trim()
                 ? 'bg-gray-200 dark:bg-[#303030] text-gray-400 cursor-not-allowed'
+                : disabled
+                ? 'bg-red-500 hover:bg-red-600 text-white cursor-pointer'
                 : 'bg-blue-500 hover:bg-blue-600 text-white cursor-pointer'
             }
           `}
-          title={disabled ? '正在发送中...' : '发送 (Enter)'}
+          title={disabled ? '停止生成' : '发送 (Enter)'}
         >
           {disabled ? (
             <Square size={18} />
