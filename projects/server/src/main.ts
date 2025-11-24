@@ -10,11 +10,14 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const cfgSrv = app.get(ConfigService)
+console.log(cfgSrv.get('CLIENT_URL'));
 
-  app.enableCors({
-    origin: cfgSrv.get('CLIENT_URL'),
-    credentials: true,
-  });
+  // app.enableCors({
+  //   origin: cfgSrv.get('CLIENT_URL'),
+  //   credentials: true,
+  // });
+
+  app.enableCors()
 
   app.use(cookieParser())
 

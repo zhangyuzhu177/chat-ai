@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { useFetch } from "@/hooks/useFetch"
 import { Bot, Sparkles, AlertCircle, X } from "lucide-react"
@@ -19,7 +19,7 @@ const GithubIcon = ({ size = 24, className = "" }: { size?: number; className?: 
   </svg>
 )
 
-export default function Auth() {
+function AuthContent() {
   const { apiBase } = useFetch()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
@@ -111,5 +111,13 @@ export default function Auth() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function Auth() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading...</div>}>
+      <AuthContent />
+    </Suspense>
   )
 }
