@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Conversation } from "./conversation";
+import { User } from "./user";
 
 @Entity()
 export class Model {
@@ -11,7 +12,7 @@ export class Model {
   name: string
 
   // 模型提供商（如 deepseek, openai 等）
-  @Column({ default: 'deepseek' })
+  @Column()
   provider: string
 
   // 最大 token 数
@@ -32,6 +33,9 @@ export class Model {
 
   @OneToMany(() => Conversation, (conversation) => conversation.model)
   conversations: Conversation[];
+
+  @ManyToOne(() => User, { nullable: false })
+  user: User
 
   @CreateDateColumn()
   createdAt: Date

@@ -32,7 +32,7 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
     return (
       <div
         key={message.id}
-        className={`flex gap-3 px-4 py-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${isUser ? 'justify-end' : 'justify-start'}`}
+        className={`flex gap-3 px-6 py-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${isUser ? 'justify-end' : 'justify-start'}`}
       >
         {/* 用户消息：右对齐，头像在右 */}
         {isUser ? (
@@ -72,7 +72,7 @@ export default function MessageList({ messages, isLoading, streamingContent }: M
             </div>
 
             {/* 消息内容 */}
-            <div className="flex flex-col max-w-[70%]">
+            <div className="flex flex-col w-full">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs text-gray-400">
                   {new Date(message.createdAt).toLocaleTimeString('zh-CN', {

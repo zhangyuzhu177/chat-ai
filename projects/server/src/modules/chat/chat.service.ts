@@ -1,34 +1,43 @@
 import OpenAI from 'openai';
 import { ConfigService } from '@nestjs/config';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, OnModuleInit } from '@nestjs/common';
 
 import { SendMessageDto } from './dto';
 import { MessageRole } from 'src/entities';
 import { ModelService } from '../model/model.service';
 import { MessageService } from '../message/message.service';
 import { ConversationService } from '../conversation/conversation.service';
+import { SysConfigService } from '../config/config.service';
+import { SysConfig } from 'src/dto';
+import { rsaDecrypt } from 'src/utils';
 
 @Injectable()
-export class ChatService {
+export class ChatService implements OnModuleInit {
   private _openai: OpenAI;
+  private _sdkConfigSignature?: string;
 
   constructor(
-    private readonly _cfgSrv: ConfigService,
     private readonly _modelSrv: ModelService,
     private readonly _messageSrv: MessageService,
+    private readonly _sysCfgSrv: SysConfigService,
     private readonly _conversationSrv: ConversationService,
   ) {
-    // 初始化 DeepSeek 客户端（使用 OpenAI SDK）
-    this._openai = new OpenAI({
-      apiKey: this._cfgSrv.get<string>('OPENAI_API_KEY'),
-      baseURL: this._cfgSrv.get<string>('OPENAI_API_BASE_URL'),
-    });
+    // 初始化 openai 客户端（使用 OpenAI SDK）
+    // this._openai = new OpenAI({
+    //   apiKey: this._cfgSrv.get<string>('OPENAI_API_KEY'),
+    //   baseURL: this._cfgSrv.get<string>('OPENAI_API_BASE_URL'),
+    // });
+  }
+
+  async onModuleInit() {
+    await this.ensureSdkClient(true);
   }
 
   /**
    * 发送消息并获取 AI 响应
    */
   async sendMessage(userId: string, dto: SendMessageDto) {
+    await this.ensureSdkClient();
     // 1. 验证对话是否存在且属于当前用户
     const conversation = await this._conversationSrv.getConversationById(
       dto.conversationId,
@@ -160,6 +169,7 @@ export class ChatService {
    * 流式发送消息（返回 SSE 流）
    */
   async sendMessageStream(userId: string, dto: SendMessageDto) {
+    await this.ensureSdkClient();
     // 验证对话
     const conversation = await this._conversationSrv.getConversationById(
       dto.conversationId,
@@ -227,5 +237,27 @@ export class ChatService {
     // 简单实现：取前 20 个字符
     const title = content.trim().slice(0, 20);
     return title + (content.length > 20 ? '...' : '');
+  }
+
+  private async ensureSdkClient(forceReload = false) {
+    const config = await this._sysCfgSrv.getConfig(SysConfig.SDK);
+    if (!config) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: '请先配置 SDK 模型',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const signature = `${config.baseURL}:${config.apiKey}`;
+    if (forceReload || !this._openai || this._sdkConfigSignature !== signature) {
+      this._openai = new OpenAI({
+        ...config,
+        apiKey: await rsaDecrypt(config.apiKey),
+      });
+      this._sdkConfigSignature = signature;
+    }
   }
 }

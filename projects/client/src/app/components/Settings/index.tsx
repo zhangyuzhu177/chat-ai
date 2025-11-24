@@ -27,7 +27,7 @@ export default function Settings() {
     },
     {
       tab: 2,
-      title: '添加模型',
+      title: '模型设置',
       icon: <Package size={16} className="text-black dark:text-white"/>
     },
   ]

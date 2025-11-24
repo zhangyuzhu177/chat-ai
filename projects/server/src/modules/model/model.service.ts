@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 
 import { Model } from 'src/entities';
 import { CreateModelDto, UpdateModelDto } from './dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ModelService {
   constructor(
     @InjectRepository(Model)
     private readonly _modelRepo: Repository<Model>,
+
+    private readonly _userService: UserService
   ) {}
 
   /**
@@ -33,9 +36,23 @@ export class ModelService {
   /**
    * 获取所有启用的模型列表
    */
-  async getActiveModels() {
+  async getActiveModels(useId: string) {
+    if (!(await this._userService.repo().existsBy({ id: useId })))
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: '用户不存在',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+
     return await this._modelRepo.find({
-      where: { isActive: true },
+      where: {
+        user: {
+          id: useId
+        },
+        isActive: true
+      },
       order: { sortOrder: 'ASC', createdAt: 'DESC' },
     });
   }
@@ -43,8 +60,22 @@ export class ModelService {
   /**
    * 获取所有模型列表（包含禁用的）
    */
-  async getAllModels() {
+  async getAllModels(useId: string) {
+    if (!(await this._userService.repo().existsBy({ id: useId })))
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: '用户不存在',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+
     return await this._modelRepo.find({
+      where: {
+        user: {
+          id: useId
+        }
+      },
       order: { sortOrder: 'ASC', createdAt: 'DESC' },
     });
   }

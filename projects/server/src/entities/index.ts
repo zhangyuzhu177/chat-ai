@@ -1,4 +1,5 @@
 export * from './user'
 export * from './model'
+export * from './config'
 export * from './message'
 export * from './conversation'

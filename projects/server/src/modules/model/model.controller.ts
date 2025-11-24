@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import type { Request } from 'express';
+import { Controller, Get, Post, Put, Delete, Body, Param, Req } from '@nestjs/common';
+
+import { IsLogin } from 'src/guards';
 import { ModelService } from './model.service';
 import { CreateModelDto, UpdateModelDto } from './dto';
-import { IsLogin } from 'src/guards';
 
 @Controller('model')
 export class ModelController {
@@ -11,8 +13,10 @@ export class ModelController {
    * 获取所有启用的模型（公开接口）
    */
   @Get('active')
-  getActiveModels() {
-    return this._modelSrv.getActiveModels();
+  @IsLogin()
+  getActiveModels(@Req() req: Request) {
+    const userId = req.user?.id || '';
+    return this._modelSrv.getActiveModels(userId);
   }
 
   /**
@@ -20,8 +24,9 @@ export class ModelController {
    */
   @Get()
   @IsLogin()
-  getAllModels() {
-    return this._modelSrv.getAllModels();
+  getAllModels(@Req() req: Request) {
+    const userId = req.user?.id || '';
+    return this._modelSrv.getAllModels(userId);
   }
 
   /**
