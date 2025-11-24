@@ -26,7 +26,9 @@ export function rsaDecrypt(hash: string, privateKey = process.env.RSA_PRIVATE_KE
       return hash
     return str.split('').map(char => String.fromCharCode(char.charCodeAt(0))).join('')
   }
-  catch (_) {
+  catch (e) {
+    console.log(e);
+    
     return hash
   }
 }

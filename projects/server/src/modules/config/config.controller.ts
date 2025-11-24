@@ -2,10 +2,9 @@ import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from "@
 
 import { SysConfig } from "src/dto";
 import { IsLogin } from "src/guards";
+import { Config } from "src/entities";
 import { SysConfigService } from "./config.service";
 import { UpsertConfigBodyDto } from "./dto/upsert-config.body.dto";
-import { Config } from "src/entities";
-import { rsaDecrypt, rsaEncrypt } from "src/utils";
 
 @Controller('config')
 export class ConfigController {
@@ -14,12 +13,13 @@ export class ConfigController {
   ) { }
   
   @Get(':version')
+  @IsLogin()
   public getConfig(@Param('version') version: SysConfig) {
     return this._sysCfgSrv.getConfig(version);
   }
 
   @Post()
-  // @IsLogin()
+  @IsLogin()
   public async upsertConfig(
     @Body() body: UpsertConfigBodyDto,
   ) {

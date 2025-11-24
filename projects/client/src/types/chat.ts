@@ -154,3 +154,25 @@ export interface UpdateModelDto {
   icon?: string
   sortOrder?: number
 }
+
+/**
+ * 系统配置
+ */
+export enum SysConfig {
+  SDK = 'sdk',
+}
+
+/**
+ * sdk配置
+ */
+export interface ConfigDto {
+  [SysConfig.SDK]: {
+    apiKey: string
+    baseURL: string
+  }
+}
+
+export interface UpsertSysConfigDto {
+  version: SysConfig
+  sdk?: ConfigDto[SysConfig.SDK]
+}

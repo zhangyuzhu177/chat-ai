@@ -9,6 +9,9 @@ import type {
   SendMessageResponse,
   CreateModelDto,
   UpdateModelDto,
+  SysConfig,
+  ConfigDto,
+  UpsertSysConfigDto,
 } from '@/types/chat'
 
 /**
@@ -16,7 +19,25 @@ import type {
  * 封装所有聊天相关的 API 调用
  */
 export class ChatApi {
-  constructor(private fetchClient: <T>(url: string, options?: any) => Promise<T>) {}
+  constructor(private fetchClient: <T>(url: string, options?: any) => Promise<T>) { }
+  
+  // ==================== 系统配置 相关 ====================
+  /**
+   * 获取系统配置
+   */
+  async getSysConfig(version: SysConfig): Promise<ApiResponse<ConfigDto[SysConfig]>> {
+    return this.fetchClient<ApiResponse<ConfigDto[SysConfig]>>(`/config/${version}`)
+  }
+
+  /**
+   * 更新系统配置
+   */
+  async updateSysConfig(dto: UpsertSysConfigDto): Promise<ApiResponse<ConfigDto[SysConfig]>> {
+    return this.fetchClient<ApiResponse<ConfigDto[SysConfig]>>('/config', {
+      method: 'POST',
+      body: dto,
+    })
+  }
 
   // ==================== Model 相关 ====================
 

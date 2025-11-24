@@ -154,10 +154,7 @@ export default function ModuleSettings() {
   return (
     <div className="flex flex-col gap-4 h-full">
       {/* 头部 */}
-      <div className="flex items-center justify-between">
-        <div className="text-lg font-bold">
-          模型管理
-        </div>
+      <div className="flex items-center">
         <Button className="cursor-pointer flex items-center gap-1 px-2 py-1 rounded-lg text-white dark:text-black bg-black dark:bg-white"
           onClick={handleOpenCreate}>
           <Plus size={18} />
