@@ -29,14 +29,17 @@ export class AuthService {
       const result = await this._httpSrv.axiosRef({
         method: 'post',
         url: `https://github.com/login/oauth/access_token`,
+        headers: {
+          'Accept': 'application/json',
+        },
         params: {
           client_id,
           client_secret,
           code,
         },
+        timeout: 10000, // 设置 10 秒超时
       });
-      const params = new URLSearchParams(result.data);
-      const accessToken = params.get('access_token');
+      const accessToken = result.data.access_token;
       if (!accessToken) {
         throw new HttpException(
           {
@@ -98,13 +101,14 @@ export class AuthService {
         maxAge:token.sign.expireAt,
       })
 
-      return res.redirect(`http://localhost:3000`);
+      return res.redirect(this._cfgSrv.get('CLIENT_URL') || 'http://localhost:3000');
     } catch (error) {
       console.log(error);
 
       // 登录失败时重定向回前端登录页，并带上错误信息
       const errorMessage = encodeURIComponent('登录失败，请重试');
-      return res.redirect(`http://localhost:3000/auth?error=${errorMessage}`);
+      const clientUrl = this._cfgSrv.get('CLIENT_URL') || 'http://localhost:3000';
+      return res.redirect(`${clientUrl}/auth?error=${errorMessage}`);
     }
   }
 

@@ -10,14 +10,13 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const cfgSrv = app.get(ConfigService)
-console.log(cfgSrv.get('CLIENT_URL'));
 
-  // app.enableCors({
-  //   origin: cfgSrv.get('CLIENT_URL'),
-  //   credentials: true,
-  // });
-
-  app.enableCors()
+  app.enableCors({
+    origin: true, // 允许任何来源（自动反射请求的 origin）
+    credentials: true, // 允许携带 Cookie
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  });
 
   app.use(cookieParser())
 
