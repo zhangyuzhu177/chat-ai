@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 
 import { AuthService } from "./auth.service";
 import { JwtAuthService } from "../jwt-auth/jwt-auth.service";
+import { IsLogin } from "src/guards";
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +26,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @IsLogin()
   public async logout(
     @Req() req: Request,
     @Res() res: Response
@@ -36,5 +38,10 @@ export class AuthController {
       message: 'success',
       data: null
     })
+  }
+
+  @Get('test')
+  public async test() {
+    return 'test'
   }
 }
