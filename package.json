@@ -6,7 +6,9 @@
   "scripts": {
     "dev:client": "pnpm --filter client dev",
     "dev:server": "pnpm --filter server dev",
-    "build:server": "pnpm --filter server build"
+    "build:server": "pnpm --filter server build",
+    "build:client": "pnpm --filter client build",
+    "build": "pnpm run build:server && pnpm run build:client"
   },
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
