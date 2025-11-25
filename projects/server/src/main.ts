@@ -12,10 +12,8 @@ async function bootstrap() {
   const cfgSrv = app.get(ConfigService)
 
   app.enableCors({
-    origin: true, // 允许任何来源（自动反射请求的 origin）
-    credentials: true, // 允许携带 Cookie
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    origin: cfgSrv.get('CLIENT_URL'),
+    credentials: true,
   });
 
   app.use(cookieParser())
