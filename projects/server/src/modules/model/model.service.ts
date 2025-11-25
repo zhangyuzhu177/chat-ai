@@ -23,6 +23,8 @@ export class ModelService {
       const model = this._modelRepo.create(dto);
       return await this._modelRepo.save(model);
     } catch (error) {
+      console.log(error);
+      
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
