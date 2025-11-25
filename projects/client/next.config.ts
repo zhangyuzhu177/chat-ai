@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     // ✅ 允许加载的外部图片域名
     domains: ['avatars.githubusercontent.com'],
   },
+  outputFileTracingRoot: process.cwd()
 };
 
 export default nextConfig;
