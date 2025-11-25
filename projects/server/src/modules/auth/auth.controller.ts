@@ -4,17 +4,20 @@ import type { Request, Response } from 'express';
 import { AuthService } from "./auth.service";
 import { JwtAuthService } from "../jwt-auth/jwt-auth.service";
 import { IsLogin } from "src/guards";
+import { ConfigService } from "@nestjs/config";
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly _authSrv: AuthService,
     private readonly _jwtAuthSrv: JwtAuthService,
+    private readonly _cfgSrv: ConfigService,
   ) { }
 
   @Get('/login')
   getAuthRedirect(@Res() res: Response) {
-    return res.redirect('https://github.com/login/oauth/authorize?client_id=Iv23liKibAIzXlVKY2it')
+    const clientId = this._cfgSrv.get('CLIENT_ID');
+    return res.redirect(`https://github.com/login/oauth/authorize?client_id=${clientId}`)
   }
 
   @Get('/github/login')
