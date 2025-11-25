@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  chat_frontend:
+    container_name: chat_frontend
+    build:
+      context: .
+      dockerfile: projects/client/Dockerfile
+    image: chat-frontend:latest
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      PORT: 3000
+    ports:
+      - "4000:3000"
+    networks:
+      - chat_net
+
+  chat_backend:
+    container_name: chat_backend
+    build:
+      context: .
+      dockerfile: projects/server/Dockerfile
+    image: chat-backend:latest
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      PORT: 3001
+    ports:
+      - "4001:3001"
+    networks:
+      - chat_net
+
+networks:
+  chat_net:
+    driver: bridge
