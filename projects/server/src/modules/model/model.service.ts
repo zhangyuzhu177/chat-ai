@@ -38,21 +38,9 @@ export class ModelService {
   /**
    * 获取所有启用的模型列表
    */
-  async getActiveModels(useId: string) {
-    if (!(await this._userService.repo().existsBy({ id: useId })))
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: '用户不存在',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-
+  async getActiveModels() {
     return await this._modelRepo.find({
       where: {
-        user: {
-          id: useId
-        },
         isActive: true
       },
       order: { sortOrder: 'ASC', createdAt: 'DESC' },
@@ -62,22 +50,9 @@ export class ModelService {
   /**
    * 获取所有模型列表（包含禁用的）
    */
-  async getAllModels(useId: string) {
-    if (!(await this._userService.repo().existsBy({ id: useId })))
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: '用户不存在',
-        },
-        HttpStatus.NOT_FOUND,
-      );
+  async getAllModels() {
 
     return await this._modelRepo.find({
-      where: {
-        user: {
-          id: useId
-        }
-      },
       order: { sortOrder: 'ASC', createdAt: 'DESC' },
     });
   }

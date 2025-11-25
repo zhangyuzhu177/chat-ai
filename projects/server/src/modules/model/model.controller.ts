@@ -14,9 +14,8 @@ export class ModelController {
    */
   @Get('active')
   @IsLogin()
-  getActiveModels(@Req() req: Request) {
-    const userId = req.user?.id || '';
-    return this._modelSrv.getActiveModels(userId);
+  getActiveModels() {
+    return this._modelSrv.getActiveModels();
   }
 
   /**
@@ -24,9 +23,8 @@ export class ModelController {
    */
   @Get()
   @IsLogin()
-  getAllModels(@Req() req: Request) {
-    const userId = req.user?.id || '';
-    return this._modelSrv.getAllModels(userId);
+  getAllModels() {
+    return this._modelSrv.getAllModels();
   }
 
   /**

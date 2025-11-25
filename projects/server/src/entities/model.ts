@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Conversation } from "./conversation";
-import { User } from "./user";
 
 @Entity()
 export class Model {
@@ -33,9 +32,6 @@ export class Model {
 
   @OneToMany(() => Conversation, (conversation) => conversation.model)
   conversations: Conversation[];
-
-  @ManyToOne(() => User, { nullable: false })
-  user: User
 
   @CreateDateColumn()
   createdAt: Date
