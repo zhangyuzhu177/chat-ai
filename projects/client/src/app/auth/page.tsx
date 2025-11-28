@@ -3,8 +3,8 @@
 import { Suspense, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { useFetch } from "@/hooks/useFetch"
-import { Bot, Sparkles, AlertCircle, X } from "lucide-react"
 import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
 
 // GitHub 图标组件
 const GithubIcon = ({ size = 24, className = "" }: { size?: number; className?: string }) => (
@@ -28,7 +28,7 @@ function AuthContent() {
   useEffect(() => {
     const errorParam = searchParams.get('error')
     if (errorParam) {
-
+      toast.error(errorParam)
       // 清除URL中的错误参数
       const url = new URL(window.location.href)
       url.searchParams.delete('error')
@@ -49,66 +49,36 @@ function AuthContent() {
   }
 
   return (
-    <div className="relative flex justify-center items-center w-full h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* 背景装饰 */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
-      {/* 登录卡片 */}
-      <div className="relative z-10 w-full max-w-md mx-4">
-
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-sm bg-opacity-90 dark:bg-opacity-90">
-          {/* 头部装饰 */}
-          <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-8 py-12">
-            <div className="flex justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-full blur-md opacity-50"></div>
-                <div className="relative bg-white dark:bg-gray-800 p-4 rounded-full">
-                  <Bot size={48} className="text-purple-600 dark:text-purple-400" />
-                </div>
-              </div>
-            </div>
-            <h1 className="text-3xl font-bold text-white text-center mb-2">
-              欢迎使用 AI Chat
-            </h1>
-          </div>
-
-          {/* 内容区域 */}
-          <div className="px-8 py-8">
-
-            {/* 登录按钮 */}
-            <button
-              type="button"
-              className={`w-full group relative overflow-hidden rounded-xl px-6 py-4 font-medium text-white transition-all duration-300 ${
-                loading
-                  ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'
-              }`}
-              onClick={login}
-              disabled={loading}
-            >
-              <div className="relative flex items-center justify-center gap-3">
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>正在跳转...</span>
-                  </>
-                ) : (
-                  <>
-                    <GithubIcon size={20} />
-                    <span>使用 GitHub 登录</span>
-                  </>
-                )}
-              </div>
-              {!loading && (
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              )}
-            </button>
-          </div>
+    <div className="flex justify-center items-center w-full h-screen">
+      <div className="w-md px-6 flex flex-col gap-8">
+        <div className="flex flex-col gap-2 items-center">
+          <h1 className="text-2xl font-bold">欢迎回来</h1>
         </div>
+        <Button
+          type="button"
+          size='lg'
+          className={`w-full group relative overflow-hidden cursor-pointer rounded-xl px-6 py-4 font-medium text-white transition-all duration-300 ${
+            loading
+              ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
+              : 'bg-linear-to-r from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'
+          }`}
+          onClick={login}
+          disabled={loading}
+        >
+          <div className="relative flex items-center justify-center gap-3">
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>登录中...</span>
+              </>
+            ) : (
+              <>
+                <GithubIcon size={20} />
+                <span>使用 GitHub 登录</span>
+              </>
+            )}
+          </div>
+        </Button>
       </div>
     </div>
   )

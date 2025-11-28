@@ -40,11 +40,12 @@ export class AuthService {
         timeout: 10000, // 设置 10 秒超时
       });
       const accessToken = result.data.access_token;
+
       if (!accessToken) {
         throw new HttpException(
           {
             status: HttpStatus.FORBIDDEN,
-            message: '获取access_token失败',
+            message: '获取Access_token失败',
           },
           HttpStatus.FORBIDDEN,
         );
@@ -69,7 +70,6 @@ export class AuthService {
           HttpStatus.FORBIDDEN,
         );
       }
-        
       
       const body: Partial<User> = {
         account: userInfo.data.login,
@@ -85,12 +85,14 @@ export class AuthService {
         }
       })
       
-      if (!user)
+      if (!user) {
         await this._userSrv.createUser({
           ...body,
           status: true,
         });
+      }
 
+      // 获取token
       const token = await this._jwtAuthSrv.signLoginAuthToken(body);
 
       res.cookie('token', token.sign.access_token, {
@@ -103,10 +105,14 @@ export class AuthService {
 
       return res.redirect(this._cfgSrv.get('CLIENT_URL') || 'http://localhost:3000');
     } catch (error) {
-      console.log(error);
+      let errorMessage = ''
 
+      if (error.status === HttpStatus.FORBIDDEN)
+        errorMessage = encodeURIComponent(error.message);
+      else
+        errorMessage = encodeURIComponent('登录失败，请重试');
+      
       // 登录失败时重定向回前端登录页，并带上错误信息
-      const errorMessage = encodeURIComponent('登录失败，请重试');
       const clientUrl = this._cfgSrv.get('CLIENT_URL') || 'http://localhost:3000';
       return res.redirect(`${clientUrl}/auth?error=${errorMessage}`);
     }

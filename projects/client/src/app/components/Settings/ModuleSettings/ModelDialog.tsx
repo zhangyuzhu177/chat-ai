@@ -1,7 +1,7 @@
 'use client'
 
 import { toast } from 'sonner'
-import { X } from 'lucide-react'
+import { Info, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import type { Model, CreateModelDto, UpdateModelDto } from '@/types/chat'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface ModelDialogProps {
   open: boolean
@@ -129,7 +130,16 @@ export default function ModelDialog({
                     <Field className='gap-1'>
                       <FieldLabel>
                         模型名称
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info size={14} />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>模型名称请与硅基流动平台模型保持一致</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </FieldLabel>
+                              
                       <Input
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}

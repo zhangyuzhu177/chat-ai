@@ -25,13 +25,15 @@ export default function Menu() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-      // 如果没有手动控制，则自动根据宽度调整
+      const shouldCollapse = width < 900
+
       if (!manualControl) {
-        setCollapsed(width < 900)
+        setCollapsed(shouldCollapse)
+        return
       }
-      // 如果窗口缩小到900以下，重置手动控制状态，强制折叠
-      if (width < 900) {
-        setCollapsed(true)
+
+      // 当手动状态与当前屏幕尺寸需求一致时，释放手动控制恢复自动模式
+      if ((shouldCollapse && collapsed) || (!shouldCollapse && !collapsed)) {
         setManualControl(false)
       }
     }
@@ -46,7 +48,7 @@ export default function Menu() {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [manualControl])
+  }, [manualControl, collapsed])
 
   const {
     conversations,

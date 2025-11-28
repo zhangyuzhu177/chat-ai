@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { toast } from "sonner"
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Pencil, Trash2, Loader } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader, Info } from 'lucide-react'
 import type { Model, CreateModelDto, UpdateModelDto } from '@/types/chat'
 
 import ModelDialog from './ModelDialog'
@@ -154,7 +154,7 @@ export default function ModuleSettings() {
   return (
     <div className="flex flex-col gap-4 h-full">
       {/* 头部 */}
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Button className="cursor-pointer flex items-center gap-1 px-2 py-1 rounded-lg text-white dark:text-black bg-black dark:bg-white"
           onClick={handleOpenCreate}>
           <Plus size={18} />
