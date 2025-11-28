@@ -156,10 +156,10 @@ export default function ModelDialog({
                         </SelectTrigger>
                         <SelectContent>
                           {providerOpts.map((opt) => {
-                              return (
-                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                              )
-                            })}
+                            return (
+                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            )
+                          })}
                         </SelectContent>
                       </Select>
                     </Field>
