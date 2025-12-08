@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { toast } from "sonner"
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Pencil, Trash2, Loader, Info } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader } from 'lucide-react'
 import type { Model, CreateModelDto, UpdateModelDto } from '@/types/chat'
 
 import ModelDialog from './ModelDialog'
@@ -13,7 +13,15 @@ import { Button } from "@/components/ui/button"
 import { TooltipContent } from '@/components/ui/tooltip'
 import { Tooltip, TooltipTrigger } from '@radix-ui/react-tooltip'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog"
 
 interface Columns {
   filed: keyof Model,
@@ -121,9 +129,6 @@ export default function ModuleSettings() {
   const handleDelete = async () => {
     if(!editingModel?.id)
       return toast.warning("模型不存在")
-
-    console.log(editingModel?.id);
-    
     try {
       await chatApi.deleteModel(editingModel?.id)
       await loadModels()

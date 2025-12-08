@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import { Info, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import type { Model, CreateModelDto, UpdateModelDto } from '@/types/chat'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface ModelDialogProps {
   open: boolean
@@ -19,7 +19,7 @@ interface ModelDialogProps {
   onClose: () => void
   onCreate: (dto: CreateModelDto) => Promise<void>
   onUpdate: (id: string, dto: UpdateModelDto) => Promise<void>
-}
+}    
 
 const providerOpts = [
   { value: 'OpenAI', label: 'OpenAI' },
@@ -139,7 +139,6 @@ export default function ModelDialog({
                           </TooltipContent>
                         </Tooltip>
                       </FieldLabel>
-                              
                       <Input
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
